@@ -1,6 +1,6 @@
 module.exports = {
-  title: 'My Documentation',
-  description: 'Document information for site',
+  title: 'Poynt Developer',
+  description: 'Poynt Developer Documentation',
   locales: {
     '/': { lang: 'en-US'}, 
     '/ru/': { lang: 'ru-RU'}
@@ -11,7 +11,20 @@ module.exports = {
       { text: 'Guides', link: '/guides/' }, 
       { text: 'Info', link: '/info/' }
     ],
-    sidebar: ['/', '/guides/', '/info/'], 
+    sidebar: [
+      '/',
+      {
+        title: 'Guides',
+        collapsible: false,
+        children:[
+          ['/guides/posapp/', 'Building a POS App']
+        ]
+      }, 
+       '/info/'
+      ], 
     lastUpdated: 'Last Update' 
+  },
+  markdown: {
+    lineNumbers: true
   }
 };
