@@ -31,7 +31,7 @@ If you already have an on-terminal app you can use it's appId to make cloud API 
 3. Enter the App name and click on “Submit” button.
 4. Click on “Download keypair” to save your newly created application credentials and click on “Go to app”.
 :::warning Warning
-Our private key cannot be recovered, so please save them it a safe location. If you lose your private key you will be able to reset the public/private keypair for your appId
+The private key cannot be recovered, so please save them it a safe location. If you lose your private key you will be able to reset the public/private keypair for your appId
 :::
 
 
