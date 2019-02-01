@@ -123,4 +123,4 @@ This is very useful to pinpoint what's failing. If you do need any assistance, h
 
 ![Create Cloud Application](../assets/p5emu16.png)
 
-Your Emulator is set up! ::tada::
+Your Emulator is set up :tada:

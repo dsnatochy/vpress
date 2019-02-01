@@ -9,10 +9,24 @@ module.exports = {
     nav:[
       { text: 'Home', link: '/'},
       { text: 'Guides', link: '/guides/posapp/' }, 
-      { text: 'Info', link: '/info/' },
+      { text: 'More Info', link: '/info/' },
       { text: 'API Reference', link: "https://poynt.com/docs/api/"}
     ],
     sidebar: {
+      '/guides/':[
+        {
+          title: 'Guides',
+          children:[
+            ['/guides/posapp/', 'Building a POS App'],
+            ['/guides/giftcard/', 'Building a custom payment solution'],
+            ['/guides/loyalty/', 'Building loyalty apps'],
+            ['/guides/cloudapp/', 'Building cloud apps']
+          ]
+        }
+      ],
+      '/info/':[
+        '/info/'
+      ],
       '/' : [
         '',
         {
@@ -58,27 +72,6 @@ module.exports = {
             ['/semiIntegration/pos-bridge', 'POS Bridge']
           ]
         },
-        '/info/',
-        {
-          title: 'Guides',
-          children:[
-            ['/guides/posapp/', 'Building a POS App'],
-            ['/guides/giftcard/', 'Building a custom payment solution'],
-            ['/guides/loyalty/', 'Building loyalty apps'],
-            ['/guides/cloudapp/', 'Building cloud apps']
-          ]
-        }
-      ],
-      '/guides/':[
-        {
-          title: 'Guides',
-          children:[
-            ['/guides/posapp/', 'Building a POS App'],
-            ['/guides/giftcard/', 'Building a custom payment solution'],
-            ['/guides/loyalty/', 'Building loyalty apps'],
-            ['/guides/cloudapp/', 'Building cloud apps']
-          ]
-        }
       ]
     },
     lastUpdated: 'Last Update' 

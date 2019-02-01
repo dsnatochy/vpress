@@ -20,8 +20,33 @@ sidebar: true
 #### Sign-up from Website
 In case you have a web component in your application or if you would like to sign up the merchant on your website then using Poynt Merchant login URL makes the flow streamlined.
 
-[Sign-up with poynt](https://poynt.net/applications/authorize?client_id=urn:aid:14d642a4-3170-4714-9fdb-efd0107281a2&redirect_uri=https%3A%2F%2Fwebhook.site%2F4ff41d52-5f9a-414d-a0f2-f34c47bd1f1c)
+[Sign-up with poynt](https://poynt.net/applications/authorize?client_id=urn:aid:f6a97531-d772-40a8-916e-4503bf188043&redirect_uri=https%3A%2F%2Fpoynt.com)
 
+The response url looks something like this 
+```
+{URL}?businessId=e3038712-3a08-4a85-859e-c8e0c4b4509d&code=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3BveW50Lm5ldCIsImlhdCI6MTU0NjYyNzE5MiwiZXhwIjoxNTQ2NjI4MDkyLCJzdWIiOiJ1cm46YWlkOmY2YTk3NTMxLWQ3NzItNDBhOC05MTZlLTQ1MDNiZjE4ODA0MyIsInBveW50LmJpeiI6ImUzMDM4NzEyLTNhMDgtNGE4NS04NTllLWM4ZTBjNGI0NTA5ZCIsInBveW50LnVpZCI6MzQ0MTUwODN9.LKX6dSg5hf-xtz0M0uvFtZSOgGKfd90re9z3GouIAkLQo2Yo1AlvAm2Gz43ZvCGyczGDwf7Ja49RE4I4p1iLI75oyhDxn9CRblpDH-HVEoAFVQKmwWFCImwByziKGCwJakCG2KeiZqBISHrqBngMYmIdJCm4PB-znhxBUEXM9X6Ce6UWR7oqcpqwki7majb1Z7rsNEq2Lkj6ORMTqbapsAi2TwuyxSccEnIDvc3RZhF-btPZ5779CrqJz_6ipfHLH5DSo9wQ1fgA9vN_TaVGvZCz7lJV3V2Cvk6iUe3AUOyZk-iN-xHz1DoNt6K2pXhSTPGh_Gj_fjjGk6pBEvkXOA&status=success
+```
+- **businessId(Deprecated)** : The business ID that was authorized <br>
+- **code** : Encoded JWT with info
+- **status** : _success_ or _fail_
+
+The code is an Encoded JWT, decoding it gives you 
+```JSON
+{
+  "iss": "https://poynt.net",
+  "iat": 1546627192,
+  "exp": 1546628092,
+  "sub": "urn:aid:f6a97531-d772-40a8-916e-4503bf188043",
+  "poynt.biz": "e3038712-3a08-4a85-859e-c8e0c4b4509d",
+  "poynt.uid": 34415083
+}
+```
+- **sub** : The appId that is authorized(in case you have mutiple apps this can come in handy) <br>
+- **poynt.biz** : The business ID that was authorized <br>
+- **poynt.uid** : Poynt user that performed authentication
+
+
+### How to get business info after loggig in?
 
 #### Sign-up on Terminal
 
@@ -31,6 +56,55 @@ If you choose to sign-up the merchant on the terminal, cheer the merchant by pre
 
 
 ### Authentication
+
+#### Fetch the current logged in user
+``` JAVA {1}
+    sessionService.getCurrentUser(listener);
+
+    private IPoyntSessionServiceListener listener = new IPoyntSessionServiceListener.Stub() {
+        @Override
+        public void onResponse(Account account, PoyntError poyntError) throws RemoteException {
+            Log.d(TAG, account.name);
+        }
+    };
+```
+#### Prompt for login
+``` JAVA
+    private View.OnClickListener loginClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Log.d(TAG, "Login clicked");
+            accountManager.getAuthToken(Constants.Accounts.POYNT_UNKNOWN_ACCOUNT,
+                    Constants.Accounts.POYNT_AUTH_TOKEN, null, IntroActivity.this,
+                    new OnUserLoginAttempt() , null);
+        }
+    };
+```
+
+``` JAVA
+    public class OnUserLoginAttempt implements AccountManagerCallback<Bundle>{
+        public void run(AccountManagerFuture<Bundle> accountManagerFuture) {
+            try {
+                Bundle bundle = accountManagerFuture.getResult();
+                String user = (String) bundle.get(AccountManager.KEY_ACCOUNT_NAME);
+                String authToken = (String) bundle.get(AccountManager.KEY_AUTHTOKEN);
+                if (authToken != null) {
+                    Toast.makeText(IntroActivity.this, user + " successfully logged in", Toast.LENGTH_LONG).show();
+                    Intent loginIntent = new Intent(IntroActivity.this, MainActivity.class);
+                    startActivity(loginIntent);
+                } else {
+                    Toast.makeText(IntroActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
+                }
+            } catch (OperationCanceledException e) {
+                e.printStackTrace();
+                Toast.makeText(IntroActivity.this, "Login cancelled", Toast.LENGTH_SHORT).show();
+            } catch (IOException | AuthenticatorException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+```
+
 
 
 
