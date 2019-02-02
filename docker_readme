@@ -1,3 +1,0 @@
-```docker build -t vpress .```
-``` docker run -p 8080:8080 -v "$(pwd)":/app vpress ``` 
-
