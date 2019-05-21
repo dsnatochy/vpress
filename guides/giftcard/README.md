@@ -1,1 +1,1 @@
-# Building a GIft Card Provider
+# Building a gift card app

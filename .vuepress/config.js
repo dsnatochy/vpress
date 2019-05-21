@@ -17,10 +17,10 @@ module.exports = {
         {
           title: 'Guides',
           children:[
-            ['/guides/posapp/', 'Building a POS App'],
-            ['/guides/giftcard/', 'Building a custom payment solution'],
-            ['/guides/loyalty/', 'Building loyalty apps'],
-            ['/guides/cloudapp/', 'Building cloud apps']
+            ['/guides/posapp/', 'Building a POS app'],
+            ['/guides/giftcard/', 'Building a gift card app'],
+            ['/guides/loyalty/', 'Building a loyalty app'],
+            ['/guides/cloudapp/', 'Building a cloud app']
           ]
         }
       ],

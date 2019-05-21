@@ -106,8 +106,95 @@ If you choose to sign-up the merchant on the terminal, cheer the merchant by pre
 ```
 
 
+## Taking Payments
+Poynt Payment Fragment provides a secure and consistent payment experience for merchants and consumers across all applications running on Poynt Smart Terminals. Payment Fragments securely process payment transactions at the Poynt OS level, so your apps do not need to worry about handling the variety of payment methods, the payment process and compliance (e.g. PCI).
 
+:::warning Making payments
+All apps on Poynt terminals need to use payment fragment for all transactions including cash.
+:::
+### Simple payment
+Receiving a payment can be as simple as creating a payment object and starting the intent to launch payment fragment. Once the payment is complete you get the result on onActivityResult.
 
+```JAVA
+    Payment payment = new Payment();
+    payment.setAmount(amount);
+    payment.setCurrency(currencyCode);
+
+    // start Payment activity for result
+    try {
+        Intent collectPaymentIntent = new Intent(Intents.ACTION_COLLECT_PAYMENT);
+        collectPaymentIntent.putExtra(Intents.INTENT_EXTRAS_PAYMENT, payment);
+        startActivityForResult(collectPaymentIntent, COLLECT_PAYMENT_REQUEST);
+    } catch (ActivityNotFoundException ex) {
+        Log.e(TAG, "Poynt payment activity not found - did you install PoyntServices?", ex);
+    }
+```
+
+Payment result contains the transaction information, there might be more than once transaction for the same payment.
+
+```JAVA
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == COLLECT_PAYMENT_REQUEST){
+            if (resultCode == Activity.RESULT_OK){
+                final Payment payment = data.getParcelableExtra(Intents.INTENT_EXTRAS_PAYMENT);
+                Log.d(TAG, "Received onPaymentAction from PaymentFragment w/ Status("
+                        + payment.getStatus() + ")");
+                // We just need to look at the payment status, the rest of the information is in the transaction object
+                switch (payment.getStatus()) {
+                    case COMPLETED:
+                        if (payment.getTransactions() != null &&  payment.getTransactions().size() > 0) {
+                            // Payment object has a list of transactions 
+                        }
+                        break;
+                    case CANCELED:
+                            // Payment was cancelled
+                        break;
+                        ...
+                        ...
+                        ...
+                }
+            } else if(resultCode == Activity.RESULT_CANCELED){
+                // Payment was cancelled by the user
+            }
+        }
+    }
+```
+
+### Customizing the payment
+The payment can be customized according to the requirements. Let's say you would like to pre-set the Tip or accept payment with debit cards only, then these can be done by setting additional parameters available on payment object.
+
+##### Disable payment options
+- **disableDebit  (boolean)** - disables debit card option <br>
+- **disableCheck  (boolean)** - disables check option <br>
+- **disableOther  (boolean)** - disables “other” option (Gift cards or - custom payment providers) <br>
+- **disableManual (boolean)** - disables manual entry <br>
+- **disableEMVCT  (boolean)** - disables EMV (chip card) payment <br>
+- **disableEMVCL  (boolean)** - disables contactless payments <br>
+- **disableMSR    (boolean)** - disables payments with magstripe cards <br>
+- **disableCash   (boolean)** - disables cash option <br>
+
+##### Restict to a certian funding source
+
+- **cashOnly (boolean)**    - launches Payment Fragment directly into the cash flow <br>
+- **debitOnly (boolean)**   - only allow debit card payment <br>
+- **creditOnly (boolean)**  - only allow payment by credit <br>
+- **manualEntry (boolean)** - launch Payment Fragment into manual card entry flow <br>
+
+##### Skip screens in the payment flow
+- **disableTip (boolean)**          - disables tip if the merchant account is configured to present tip screen. <br>
+- **skipReceiptScreen (boolean)**   - do not show the receipt screen <br>
+- **skipSignatureScreen (boolean)** - do not show signature screen <br>
+- **skipPaymentConfirmationScreen (boolean)** - Displays processing screen as opposed to Thank you screen after a payment is complete. <br>
+
+##### Additional options
+- **readCardDataOnly (boolean)** - do not process transaction just return some information about the card (e.g. last 4, first 6, name) <br>
+- **offlineAuth (boolean)** - process offline transaction. Can be used if there is no network connectivity. Merchant will be prompted to provide an approval code they obtained from the issuing bank. <br>
+- **offlineApprovalCode (String)** - optionally the approval code can be passed in the request to launch Payment Fragment. <br>
+- **disablePaymentOptions (boolean)** - hide the “Summary”, “Notes” and “Receipt” options from the Payment Fragment. <br>
+- **disableChangeAmount (boolean)** - if the payment fragment is invoked to perform refund or capture, setting this flag to “true” will not allow the merchant to edit the amount, i.e. no partial capture or partial refund. <br>
+- **notes (String)** - custom notes which will be added to the transaction <br>
+- **setReferences (List\<TransactionReference\> references)** - Pass custom references that will be applied to transactions <br>
 ## Catalog & Inventory
 
 ## Orders

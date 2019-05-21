@@ -292,3 +292,5 @@ if (order.getItems() != null) {
     Log.d(TAG, "No items in order");
     finishWithToast("No order items in the order", Toast.LENGTH_SHORT);
 }
+```
+Once the discount is applied to the order, do not forget to pass back the modified order in the payment object and finish the activity with a RESULT_OK 
