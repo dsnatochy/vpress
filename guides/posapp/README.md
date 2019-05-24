@@ -174,7 +174,7 @@ The payment can be customized according to the requirements. Let's say you would
 - **disableMSR    (boolean)** - disables payments with magstripe cards <br>
 - **disableCash   (boolean)** - disables cash option <br>
 
-##### Restict to a certian funding source
+##### Restict to a certain funding source
 
 - **cashOnly (boolean)**    - launches Payment Fragment directly into the cash flow <br>
 - **debitOnly (boolean)**   - only allow debit card payment <br>
@@ -196,6 +196,78 @@ The payment can be customized according to the requirements. Let's say you would
 - **notes (String)** - custom notes which will be added to the transaction <br>
 - **setReferences (List\<TransactionReference\> references)** - Pass custom references that will be applied to transactions <br>
 ## Catalog & Inventory
+Poynt OS has support for catalog and inventory out of the box. [Poynt product service](https://poynt.github.io/developer/javadoc/co/poynt/os/services/v1/IPoyntProductService.html) provides a way to access the catalog from the terminal. 
+
+:::tip
+[Catalog model](https://poynt.com/docs/api/#model-catalog)
+[Product model](https://poynt.com/docs/api/#model-product)
+:::
+### Fetching catalog
+Product service provides multiple ways of accesing the catalog. You could either get all products alone or get the complete catalog with the categories and metadata.
+The following code shows fetching the entire catalog from the local content provider or from the cloud.
+```JAVA
+try {
+    productService.getRegisterCatalogWithProducts(catalogWithProductListener);
+    // Limit the use of this method since it fetches from the cloud, it is data intensive
+    // productService.getRegisterCatalogWithProductsFromCloud(catalogWithProductListener);
+} catch (RemoteException e) {
+    e.printStackTrace();
+}
+
+private IPoyntProductCatalogWithProductListener catalogWithProductListener = new IPoyntProductCatalogWithProductListener.Stub() {
+    @Override
+    public void onResponse(CatalogWithProduct catalogWithProduct, PoyntError poyntError) throws RemoteException {
+        if (poyntError == null) {
+            try {
+                // CatalogWithProduct has a list of CategoryWithProduct
+                // CategoryWithProduct has a list of CatalogItemWithProduct
+                // CatalogItemWithProduct has the actual Product
+            } catch (Exception e) {
+                Log.d(TAG, e.toString());
+            }
+        } else {
+            Log.e(TAG, poyntError.toString())
+        }
+    });
+};
+```
+
+### Updating product information
+Updating a product can be done from a terminal app.
+Here is how to update the product in 3 steps,
+1. Create a json patch for the fields that need to be updated
+```JAVA
+
+public static String getProductPatch(Product product) {
+        List<JsonPatchElement> patchElements = new ArrayList<JsonPatchElement>();
+        JsonArray patchArray = new JsonArray();
+        if (product!= null) {
+            // price
+            if (product.getPrice() != null) {
+                // update
+                JsonPatchElement<Long> priceElement = new JsonPatchElement<>();
+                priceElement.setOp("add");
+                priceElement.setPath("/price/amount");
+                priceElement.setValue(product.getPrice().getAmount());
+                patchElements.add(priceElement);
+            } else {
+                // remove
+                JsonPatchElement<Long> priceElement = new JsonPatchElement<>();
+                priceElement.setOp("remove");
+                priceElement.setPath("/price/amount");
+                patchElements.add(priceElement);
+            }
+        }
+        JsonElement patch = new Gson().toJsonTree(patchElements);
+        return patch.toString();
+    }
+```
+2. Send the json patch to update the product.
+```JAVA
+productService.updateProduct(product.getId(), getProductPatch(product), productServiceListener);
+```
+
+3. Refresh the local catalog by fetching from the cloud
 
 ## Orders
 
