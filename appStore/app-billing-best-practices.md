@@ -13,7 +13,7 @@ All billing plans can be set at different scopes based on your business model. A
 ## Subscription life-cycle
 Poynt Billing service is responsible for maintaining the life-cycle of each subscription. The subscriptions are initiated when a merchant signs up for one and ended when either a merchant explicitly requests a cancellation or fails to pay for the subscription within the allowed grace period.
 
-::: warning
+::: tip
 Merchants can cancel the subscriptions by themselves through the Poynt Apps app via the Account screen in App Store. 
 :::
 
@@ -29,7 +29,7 @@ Whenever an update to your app is released, it is very important to make sure al
 
  * When adding new plans, please indicate whether you intend to replace existing plans with the new plans or add them as additional plans. Please note that Poynt never deletes existing plans that have any on-going subscriptions attached to them, but can hide them from being displayed to the merchants as available billing plans based on your needs.
  * When deprecating existing plans, please make sure you handle merchants with existing subscriptions gracefully. You can either (1) continue supporting them, or (2) request them to upgrade from within your application to a newer plan using the Poynt Billing Fragment API.
-::: warning
+::: warning Best Practice
  Always avoid hard coding the planIds in your application APKs. Use the GetPlans API in the Poynt In-App Billing service to query available plans for your application and use your backend to identify what features/functionality the merchant is authorized to use based on the subscribed plan. This will help you support merchants that might have subscribed to a newer plan but still using an older version of your app.
  :::
 

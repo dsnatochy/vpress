@@ -41,6 +41,10 @@ module.exports = {
           title: 'On Terminal Apps',
           children:[
             ['/terminalApps/', 'On Terminal Apps'],
+            ['/terminalApps/authenticating-terminal', 'Merchant info and authentication'],
+            ['/terminalApps/second-screen', 'Working with second screen'],
+            ['/terminalApps/multi-mid', 'Working with multi-mid'],
+            ['/terminalApps/order-ahead', 'Order ahead'],
           ] 
         },
         {
@@ -53,6 +57,7 @@ module.exports = {
           title: 'App Marketplace',
           children:[
             ['/appStore/app-ecosystem', 'Poynt Apps Eco System'],
+            ['/appStore/developer-agreement', 'Poynt Developer Agreement'],
             ['/appStore/app-development-guidelines', 'App Development Guidelines'],
             ['/appStore/app-review', 'App Review'],
             ['/appStore/app-compliance-requirements', 'App Compliance Requirements'],
@@ -67,7 +72,7 @@ module.exports = {
           title: 'Semi-Integration',
           children:[
             ['/semiIntegration/', 'Overview'],
-            ['/semiIntegration/payment-bridge', 'Poynt Apps Eco System'],
+            ['/semiIntegration/payment-bridge', 'Payment Bridge API'],
             ['/semiIntegration/plug-n-pay', 'Plug and Pay(PnP)'],
             ['/semiIntegration/pos-bridge', 'POS Bridge']
           ]

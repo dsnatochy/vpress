@@ -2,7 +2,7 @@
 title: "Integrating Payment Bridge API"
 lang: en-us
 ---
-
+# Payment Bridge API
 ::: warning Note
 While this API is currently availalbe at no charge, Poynt reserves the right to introduce an API usage fee in the future.
 ::: 

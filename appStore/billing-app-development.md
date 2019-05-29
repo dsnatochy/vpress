@@ -29,6 +29,7 @@ dev {
 
 ::: warning 
 Please note that __initWith debug__ statement will ensure that the dev variant is signed with Android Studio debug keys. Unsigned apps will fail to install on Poynt. [Learn more about build variants on Android](https://developer.android.com/studio/build/build-variants.html)
+::: 
 
 * Once you create and submit a test app using your “dev” variant, please contact Poynt dev support to enable this app to show up in Poynt Apps marketplace for “test merchants”. Please note that this will enable your test app to only show up for “test merchant” accounts used by developers.
 * When you are satisfied with your integration and testing, generate a release build with your live package name (Eg. “com.example.myapp”) and submit for App Review as your final app. Note that the appId and App credentials (RSA public key pair) for your live application would be different from the test application, and you would need to create the billing plans again for the live app.
@@ -89,9 +90,9 @@ Below you'll find more detailed step by step process on how to setup your applic
 
 While integrating with Poynt Billing, please consider the following scenarios and make sure your application code can handle these as necessary. Please refer to [App Billing Best Practices](app-billing-best-practices.html) to make sure your app covers all possible billing scenarios.
 
-1. merchant has a valid subscription but never used your app before (**first time subscriber**)
-2. merchant has a valid subscription and has used your app before (**returning subscriber**)
-3. merchant has a canceled subscription after using your app (**canceled subscriber**)
-4. merchant has no subscriptions and never used your app - although this is no longer possible once you’ve integrated with Poynt Billing, we still recommend you to handle this scenario to prevent any fraud that might occur in the future. (**not a subscriber**)
-5. merchant has no subscriptions and has used your app before - these are your existing merchants before you’ve switched to Poynt billing. You must make sure you grandfather these merchants to provide a more graceful upgrade process to billing. (**grandfathered subscriber**)
-6. merchant has a valid subscription but wants to upgrade or downgrade (**upsell/downsell subscriber**)
+1. Merchant has a valid subscription but never used your app before (**first time subscriber**)
+2. Merchant has a valid subscription and has used your app before (**returning subscriber**)
+3. Merchant has a canceled subscription after using your app (**canceled subscriber**)
+4. Merchant has no subscriptions and never used your app - although this is no longer possible once you’ve integrated with Poynt Billing, we still recommend you to handle this scenario to prevent any fraud that might occur in the future. (**not a subscriber**)
+5. Merchant has no subscriptions and has used your app before - these are your existing merchants before you’ve switched to Poynt billing. You must make sure you grandfather these merchants to provide a more graceful upgrade process to billing. (**grandfathered subscriber**)
+6. Merchant has a valid subscription but wants to upgrade or downgrade (**upsell/downsell subscriber**)

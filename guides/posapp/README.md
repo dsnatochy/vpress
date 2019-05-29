@@ -235,8 +235,9 @@ private IPoyntProductCatalogWithProductListener catalogWithProductListener = new
 ### Updating product information
 Updating a product can be done from a terminal app.
 Here is how to update the product in 3 steps,
-1. Create a json patch for the fields that need to be updated
-```JAVA
+1. Create a json patch for the fields that need to be updated.
+Sample code shows creating a patch for changing the price
+~~~JAVA
 
 public static String getProductPatch(Product product) {
         List<JsonPatchElement> patchElements = new ArrayList<JsonPatchElement>();
@@ -261,28 +262,193 @@ public static String getProductPatch(Product product) {
         JsonElement patch = new Gson().toJsonTree(patchElements);
         return patch.toString();
     }
-```
+~~~
 2. Send the json patch to update the product.
-```JAVA
+~~~JAVA
 productService.updateProduct(product.getId(), getProductPatch(product), productServiceListener);
-```
+~~~
 
 3. Refresh the local catalog by fetching from the cloud
 
 ## Orders
+Poynt SDK provides support for creating and manging orders.
+The order model is simple and supports wide range of use cases let it be a restaurant or a retail store. 
 
+:::tip Model Reference
+[Order](https://poynt.com/docs/api/#model-order)
+:::
+
+### Creating orders
+#### Order Items
+Order item can be created from a product in the catalog
+The code snippet shows how to create an order from the product.
+Similar code can be used to create an order item from an external catalog.
+~~~JAVA
+    OrderItem item = new OrderItem();
+    item.setName(product.getName());
+    item.setProductId(product.getId());
+    item.setUnitPrice(product.getPrice().getAmount());
+    item.setQuantity(quantity);
+    item.setDetails(product.getDescription());
+    item.setSku(product.getSku());
+    item.setStatus(OrderItemStatus.ORDERED);
+~~~
+
+Fee's, discount's and tax's can be applied to an order item, each item supports a list of each attribute
+:::tip 
+[OrderItemTax](https://poynt.com/docs/api/#model-orderitemtax) <br>
+[Fee](https://poynt.com/docs/api/#model-fee) <br>
+[Discount](https://poynt.com/docs/api/#model-discount) <br>
+:::
+
+#### Order amounts
+The order amounts needs to be the sum total of all order item level amounts and order level fees and discounts
+~~~JAVA
+OrderAmounts amounts = new OrderAmounts();
+for (OrderItem item : items){
+    Float quantity = item.getQuantity();
+    float itemPrice = (item.getUnitPrice() * item.getQuantity());
+    float itemsfee = 0;
+
+    // Add item Fees
+    if (item.getFees() != null && item.getFees().size() > 0){
+        for (Fee fee : item.getFees()){
+            if (fee.getPercentage() != null){
+                itemsfee += itemPrice * fee.getPercentage();
+            }else {
+                itemsfee += fee.getAmount();
+            }
+        }
+        itemsFeeTotal = (long)itemsfee;
+    }else{
+        if(item.getFee() != null) {
+            itemsFeeTotal += (long) (quantity * item.getFee());
+        }
+    }
+
+    // Add item discounts
+    if(item.getDiscount() != null) {
+        itemsDiscountTotal -= item.getDiscount();
+    }
+
+    // Add item Taxes
+    itemsTaxTotal += getItemTax(item);  // refer to the sample POS app
+    
+    itemsSubTotal += itemPrice;
+}
+
+// Set the totals to the amounts
+amounts.setFeeTotal(itemsFeeTotal);
+amounts.setDiscountTotal(itemsDiscountTotal);
+amounts.setTaxTotal(itemsTaxTotal);
+amounts.setSubTotal(itemsSubTotal);
+
+itemsNetTotal = itemsSubTotal + itemsFeeTotal + itemsDiscountTotal + itemsTaxTotal;
+amounts.setNetTotal(itemsNetTotal);
+~~~
+
+Create an order on the device and cloud by sending the order object that is created. The request takes a listener as an input to provide with the result.
+~~~JAVA
+orderService.createOrder(order, UUID.randomUUID().toString(), createOrderListener);
+~~~
+
+Updating order can be done in a similar way incase the items are modified or new items need to be added
+The order Id of the original order needs to be passed in to update the order.
+~~~JAVA
+orderService.updateOrder(orderId, order, UUID.randomUUID().toString(), updateOrderLister);
+~~~
+
+When the payment for an order has been received the order can be closed by setting the associated transaction to it and calling the complete order
+~~~JAVA
+order.setTransactions(payment.getTransactions());
+orderService.completeOrder(orderId, order, UUID.randomUUID().toString(), completeOrderListener);
+~~~
+
+:::tip 
+The item statuses need to be updated to **FULFILLED** before marking an order as complete.
+:::
+
+#### Fetching open orders
+The orders created are also stored locally in the content providers on the device.
+~~~JAVA
+String[] mProjection = OrderstatusesColumns.FULL_PROJECTION;
+String mSelectionClause = OrderstatusesColumns.FULFILLMENTSTATUS + "= ?";
+String[] mSelectionArgs = {OrderStatus.OPENED.status()};
+String mSortOrder = null;
+Cursor cursor = getContentResolver().query(OrdersColumns.CONTENT_URI_WITH_NETTOTAL_TRXN_STATUS,
+                mProjection, mSelectionClause, mSelectionArgs, mSortOrder);
+OrdersCursor orderCursor = new OrdersCursor(cursor);
+if (orderCursor != null) {
+    if (orderCursor.getCount() > 0) {
+        while (orderCursor.moveToNext()) {
+            orderId = orderCursor.getOrderid();
+            Log.d(TAG, "order id: " + orderId);
+            Log.d(TAG, "customer user id: " + orderCursor.getCustomeruserid());
+            Log.d(TAG, "order number: " + orderCursor.getOrdernumber());
+        }
+    }
+    orderCursor.close();
+    cursor.close();
+}
+~~~
 ## Scanning Products
+Scan products using the scanner API provided by the Poynt OS. The scanner library supports most commonly used QR and bar codes.
+The scanner can be invoked by starting an itent with optional extras
 
+~~~JAVA
+Intent intent = new Intent("poynt.intent.action.SCANNER");
+// "MULTI" or "SINGLE" allows for multiple product scans in a single go
+intent.putExtra("MODE", "SINGLE");
+// if multi mode - also register the receiver
+IntentFilter scannerIntentFilter = new IntentFilter();
+startActivityForResult(intent, SCANNER_REQUEST_CODE);
+
+// If multi scan mode is enabled register for a broadcast to receive the codes
+scannerIntentFilter.addAction("poynt.intent.action.SCANNER_RESULT");
+registerReceiver(scanResultReceiver, scannerIntentFilter);
+~~~
+
+The result for a scan is obtained in the onActivityResult of the calling activity.
+~~~JAVA
+// Check which request we're responding to
+if (requestCode == SCANNER_REQUEST_CODE) {
+    // Make sure the request was successful
+    if (resultCode == RESULT_OK) {
+        // get scan results
+        String code = data.getStringExtra("CODE");
+        String format = data.getStringExtra("FORMAT");
+    } else if (resultCode == RESULT_CANCELED) {
+        Log.d(TAG, "Result canceled");
+    }
+    // unregister for the broadcast receiver if you have previously registered for
+    unregisterReceiver(scanResultReceiver);
+}
+~~~
 ## Collecting Customer Info
-
-## Processing Payments
-
+The second screen on Poynt smart terminals is not just for collecting pin, there are a set of pre-defined templates that can be used to interact with customers and collect information.
+Here is a simple snippet to collect email,
+~~~JAVA
+Bundle options = new Bundle();
+options.putString(Intents.EXTRA_EMAIL, "Enter your email");
+options.putString(EXTRA_LEFT_BUTTON_TITLE, "TAKE MY EMAIL");
+options.putString(EXTRA_RIGHT_BUTTON_TITLE, "GIVE ME PRIVACY");
+secondScreenService.captureEmail(options, new IPoyntEmailEntryListener.Stub() {
+    @Override
+    public void onEmailEntered(String s) throws RemoteException {
+        Log.d(TAG, "Email entered : " + s);
+    }
+    @Override
+    public void onCancel() throws RemoteException {
+        Log.d(TAG, "Email entry cancelled");
+    }
+});
+~~~
 ## Printing Receipts
 
 ## Post Sale Operations
 
 ## Settlements
-
+Coming soon...
 ## Offline Mode
-
+Coming soon...
 ## Poynt Cloud Messaging
