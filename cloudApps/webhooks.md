@@ -92,13 +92,11 @@ Content-Type: application/json
 To validate the authenticity of the webhook payload you need to create a base64 encoded binary SHA1 HMAC of the payload and compare it to the value of `Poynt-Webhook-Signature` HTTP header sent in the webhook request. Here's an example how this can be done using openssl:
 
 ~~~bash
-bash$ echo -n '<webhook json object>' | openssl sha1 -hmac "not-the-secret-you-know" -binary | base64
-
-PkaykJxe3c5rHtZjcfBKWLk2khA=
+bash$ echo -n '<webhook json object>' | openssl sha1 -hmac "not-the-secret-you-know" -binary | base64 PkaykJxe3c5rHtZjcfBKWLk2khA=
 ~~~
 
-::: warning
-**Please note** that Poynt only waits for **2 seconds** to receive an acknowledgement from your webhook listener (i.e. HTTP 200 response). If we don't receive a response, the delivery will be retried, so as a best practice make sure your webhook listener logic can de-dupe multiple requests.
+::: warning Note
+Poynt only waits for **2 seconds** to receive an acknowledgement from your webhook listener (i.e. HTTP 200 response). If we don't receive a response, the delivery will be retried, so as a best practice make sure your webhook listener logic can de-dupe multiple requests.
 :::
 
 Python sample is available [here](https://gist.github.com/peterkools/9a3f0eab3072cf6d97a8071ec3d47a39).

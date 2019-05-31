@@ -194,6 +194,8 @@ The payment can be customized according to the requirements. Let's say you would
 - **disablePaymentOptions (boolean)** - hide the “Summary”, “Notes” and “Receipt” options from the Payment Fragment. <br>
 - **disableChangeAmount (boolean)** - if the payment fragment is invoked to perform refund or capture, setting this flag to “true” will not allow the merchant to edit the amount, i.e. no partial capture or partial refund. <br>
 - **notes (String)** - custom notes which will be added to the transaction <br>
+
+#### Transaction references
 - **setReferences (List\<TransactionReference\> references)** - Pass custom references that will be applied to transactions <br>
 ## Catalog & Inventory
 Poynt OS has support for catalog and inventory out of the box. [Poynt product service](https://poynt.github.io/developer/javadoc/co/poynt/os/services/v1/IPoyntProductService.html) provides a way to access the catalog from the terminal. 

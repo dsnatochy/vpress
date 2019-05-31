@@ -39,5 +39,5 @@ dependencies {
 ``` 
 
 ::: tip
-Refer to [Release notes](/info/release-notes) for latest **release-version**
+Refer to [Release notes](/info/#release-notes) for latest **release-version**
 :::

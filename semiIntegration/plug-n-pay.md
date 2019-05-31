@@ -13,13 +13,13 @@ Plug and Pay is a simple embeddable Javascript snippet that allows you to add a 
 To create a button that charges a specified amount to a device, simply insert
 the snippet below where you want the button to appear.
 
-```javascript
+~~~javascript
     <script>
       id='poynt-script'
       src='https://poynt.net/snippet/pnp/script.js'
       data-purchase-amount=1200
     </script>
-```
+~~~
 
 ![CHARGE button](../assets/pnp1.png)
 ::: tip Note
@@ -28,17 +28,17 @@ If no serial number or device ID is specified, the payment will be initiated on 
 
 The first time you the merchant clicks the button they will be prompted to log in to their account to authorize initiating payments on their terminal.
 
-![PnP Login](../assets/pnp2.png){:height="510px"}
-![PnP Login](../assets/pnp4.png){:height="510px"}
-![PnP Login](../assets/pnp3.png){:height="510px"}
+![PnP Login](../assets/pnp2.png)
+![PnP Login](../assets/pnp4.png)
+![PnP Login](../assets/pnp3.png)
 
 All subsequent clicks will provide a visual indicator while the payment is in progress,
 
-![Waiting for Payment](../assets/pnp5.png){:height="510px"}
+![Waiting for Payment](../assets/pnp5.png)
 
 and when payment is completed or failed/canceled.
 
-![Payment Approved](../assets/pnp6.png){:height="510px"}
+![Payment Approved](../assets/pnp6.png)
 
 ### Script Attributes
 
@@ -60,7 +60,7 @@ and when payment is completed or failed/canceled.
 
 To handle the payment status, implement the following code:
 
-```javascript
+~~~javascript
 window.addEventListener('message', function (e) {
   var data = e.data;
   var eventName = data.eventName;
@@ -74,11 +74,11 @@ window.addEventListener('message', function (e) {
       // Request timed out
     }
 });
-```
+~~~
 
 In the above javascript `payload` will contain a JSON object with an array of one of more transaction:
 
-```json
+~~~json
 {
   "referenceId": "d9eeb461-870c-4b9b-aa10-2e57510ab781",
   "status": "PROCESSED",
@@ -176,4 +176,4 @@ In the above javascript `payload` will contain a JSON object with an array of on
     }
   ]
 }
-```
+~~~

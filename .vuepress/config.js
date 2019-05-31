@@ -25,7 +25,14 @@ module.exports = {
         }
       ],
       '/info/':[
-        '/info/'
+        {
+          title: 'More Info',
+          children:[
+            ['/info/', 'Overview'],
+            ['/info/developer-faqs', 'Developer FAQs'],
+            ['/info/release-notes', 'Poynt SDK release notes'],
+          ]
+        }
       ],
       '/' : [
         '',
@@ -34,22 +41,27 @@ module.exports = {
           children:[
             ['/setupTerminal/', 'Activate Developer Mode'],
             ['/setupTerminal/setup-emulator', 'Setup Poynt OS Emulator'],
-            ['/setupTerminal/activate-terminal', 'Activate Terminal']
+            ['/setupTerminal/activate-terminal', 'Activate Terminal'],
+            ['/setupTerminal/assign-catalog', 'Assign Catalog']
           ]
         },
         {         
           title: 'On Terminal Apps',
           children:[
-            ['/terminalApps/', 'On Terminal Apps'],
+            ['/terminalApps/', 'On terminal apps'],
             ['/terminalApps/authenticating-terminal', 'Merchant info and authentication'],
+            ['/terminalApps/payment-fragment', 'Poynt payment fragment'],
             ['/terminalApps/second-screen', 'Working with second screen'],
             ['/terminalApps/multi-mid', 'Working with multi-mid'],
             ['/terminalApps/order-ahead', 'Order ahead'],
+            ['/terminalApps/cloud-messaging', 'Cloud Messaging'],
           ] 
         },
         {
           title: 'Cloud Apps',
           children:[
+            ['/cloudApps/', 'Overview'],
+            ['/cloudApps/integrating-with-poynt-cloud-apis', 'Cloud API'],
             ['/cloudApps/webhooks', 'Webhooks'],
           ]
         },

@@ -1,54 +1,30 @@
 ---
-title: Information
+title: "More Info"
+lang: en-us
 ---
+# Overview
 
-## Poynt OS Sdk
+## PoyntOS Android SDK Samples
 
-Poynt OS SDK is distributed as an Android Library (aar) through our Maven repository.
+Android Apps using PoyntOS SDK: [https://github.com/poynt/PoyntSamples](https://github.com/poynt/PoyntSamples)
 
 
-### Adding the Poynt OS SDK dependencies
+## Cloud API SDK
+* [Java Cloud API SDK](https://github.com/poynt/java-cloud-sdk)
+* 3rd party [Node.js SDK](https://github.com/boblautenbach/POYNT_NODE)
+* [Python SDK](https://github.com/poynt/poynt-python)
 
-To use the Poynt OS SDK, add the following dependencies in your build.gradle file - note that you would need to add our maven repository in your gradle file too:
-To use the Poynt SDK add the maven repository to your root build.gradle file 
 
-```
-allprojects {
-    repositories {
-        google()
-        jcenter()
-        maven {
-            url 'https://nexus.poynt.com/content/repositories/releases'
-        }
-    }
-}
-```
-Add the following dependencies to the build.gradle file of the app
+## Cloud API samples
 
-```
-dependencies {
-  compile fileTree(dir: 'libs', include: ['*.jar'])
+* Python Sample demonstrating API usage: [https://github.com/poynt/python-sample](https://github.com/poynt/python-sample)
 
-  // Poynt SDK and Model Dependencies
-  implementation 'co.poynt.api:android-api-model:<release-version>@jar'
-  implementation 'co.poynt.android.sdk:poynt-sdk:<release-version>1@aar'
 
-  // Gson dependency
-  compile 'com.google.code.gson:gson:2.8.0@jar'
+## Other
+* Poynt [Cordova/PhoneGap Plugin](https://www.npmjs.com/package/cordova-plugin-poynt)
+* Poynt [iOS SDK](https://github.com/poynt/pos-connector-ios-sdk-sample) for POS Bridge
+* Poynt [Windows SDK](https://github.com/poynt/pos-connector-windows-sdk) for POS Bridge
 
-  // JWT dependencies - if you want to parse JWTs
-  compile 'net.jcip:jcip-annotations:1.0@jar'
-  compile 'com.nimbusds:nimbus-jose-jwt:2.26@jar'
-  compile 'net.minidev:json-smart:1.2@jar'
-}
-``` 
+<!-- feedback widget -->
+<SCRIPT type="text/javascript">window.doorbellOptions = { appKey: 'eDRWq9iHMZLMyue0tGGchA7bvMGCFBeaHm8XBDUSkdBFcv0cYCi9eDTRBEIekznx' };(function(w, d, t) { var hasLoaded = false; function l() { if (hasLoaded) { return; } hasLoaded = true; window.doorbellOptions.windowLoaded = true; var g = d.createElement(t);g.id = 'doorbellScript';g.type = 'text/javascript';g.async = true;g.src = 'https://embed.doorbell.io/button/6657?t='+(new Date().getTime());(d.getElementsByTagName('head')[0]||d.getElementsByTagName('body')[0]).appendChild(g); } if (w.attachEvent) { w.attachEvent('onload', l); } else if (w.addEventListener) { w.addEventListener('load', l, false); } else { l(); } if (d.readyState == 'complete') { l(); } }(window, document, 'SCRIPT')); </SCRIPT>
 
-::: tip
-Refer to [Release notes](/info/#release-notes) for latest **release-version**
-:::
-
-## Creating an App on Developer Portal
-
-## Submitting the App
-
-## Relase Notes

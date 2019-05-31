@@ -1,0 +1,20 @@
+{
+  "name": "vpress",
+  "version": "1.0.0",
+  "description": "--- title: Poynt OS lang: en-US ---",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dmuppiri/vpress.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dmuppiri/vpress/issues"
+  },
+  "homepage": "https://github.com/dmuppiri/vpress#readme"
+}

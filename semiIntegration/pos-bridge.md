@@ -15,7 +15,7 @@ When POS Bridge app is launched it starts advertising its IP and port using [net
 
 Once a pairing request is initiated by the client the POS Bridge will display a confirmation dialog:
 
-![POS Bridge pairing confirmation dialog](../assets/posbridge2.png){:width="600px"}
+![POS Bridge pairing confirmation dialog](../assets/posbridge2.png)
 
 ::: warning Note 
 The confirmation dialog timeout is set to 30 seconds.
@@ -24,11 +24,10 @@ The confirmation dialog timeout is set to 30 seconds.
 
 After the pairing request is confirmed the POS Bridge will display the name of the connected client. Pairing can be terminated by tapping on **X** button.
 
-![POS Bridge with paired client](../assets/posbridge3.png){:width="600px"}
-
+![POS Bridge with paired client](../assets/posbridge3.png)
 POS Bridge will remain running in the background and does not need to be open to accept payment requests from the client.
 
-![POS Bridge with Payment Fragment](../assets/posbridge4.png){:width="600px"}
+![POS Bridge with Payment Fragment](../assets/posbridge4.png)
 
 ::: tip Note
 At the moment the terminal can be paired with only one client (POS) using POS Bridge.

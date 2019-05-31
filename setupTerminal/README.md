@@ -1,5 +1,5 @@
 ---
-title: Setup Poynt Terminal
+title: Activate Developer Mode
 lang: en-US
 next: /setupTerminal/activate-terminal
 ---
