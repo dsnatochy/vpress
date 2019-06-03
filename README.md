@@ -1,41 +1,33 @@
-# Hello World
+# Instructions to run development server
 
-<pre style="color:white">
-{{ $page }}
-</pre>
+## Running on docker
 
-::: danger STOP
-Danger zone, do not proceed. Or else!
-::: 
- 
-::: warning Scary Warning
-What's?
-:::
+Execute the following commands from within the repository root
 
-::: tip Awesome tip
-Now what?
-:::
+``` docker build -t vpress . ``` <br>
+``` docker run -p 8080:8080 -v "$(pwd)/docs":/app vpress ``` 
 
-This was great, but we are finally nearing the point where we need to provide more relevant content. I think it's time we talked about Ember, Vue and React and compared all three. Let alone Angular. I don't know who else is using Angular at this point, but since it originated at Google I am sure some G engineers still use it and are working on releasing Angular 2. Ember has a bit of a learning curve. You start with nothing and boom! You have to learn so much. Lots of things don't make sense and are implicit.
+## Running without docker
 
-> markdown!
->> markdown2!!
+Install nodeJs <br>
+``` brew install node ``` <br>
+Install VuePress <br>
+``` npm install -g vuepress@next ``` <br>
+Start dev server <br>
+``` vuepress dev ``` <br>
 
->>> markdown 3
 
->>>> markdown 4
+## File structure
 
-<table>
-  <thead>
-     <td>Column</td>
-  </thead>
-  <tr>
-    <td>Content</td>
-  </tr>
-</table>
+-- `docs` Contains the documentation markdown files <br>
+     |______ `.vuepress` Contains the configs <br>
+        |________ `config.js` The main config file <br>
 
-<my-comp></my-comp>
 
-[Link Somewhere](http://yahoo.com)
+## Generating static pages for deploying
+**It is assumed that npm is already installed on the machine**
+### Install vuepress dependency(Not required if running without docker)
+``` npm install -D vuepress ```
 
-[Another Link](http://poynt.com)
+### Execute the command
+``` npm run docs:build ```

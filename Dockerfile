@@ -32,13 +32,14 @@ WORKDIR /app
 #RUN npm install
 
 # copy project files and folders to the current working directory (i.e. 'app' folder)
-COPY . .
-COPY .vuepress .
-COPY .git .
+# COPY . .
+# COPY .vuepress .
+# COPY .git .
+#VOLUME /app
 
 # build app for production with minification
 #RUN npm run build
-EXPOSE 48080
+EXPOSE 8080
 
 CMD ["vuepress","dev"]
 
